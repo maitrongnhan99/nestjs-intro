@@ -1,0 +1,7 @@
+# POST /users/create
+POST http://localhost:3000/users/create
+Content-Type: application/json
+
+{
+  "name": "John Doe 11"
+}

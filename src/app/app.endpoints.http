@@ -1,0 +1,12 @@
+
+# GET /
+GET http://localhost:3000/
+
+###
+
+# GET /about
+GET http://localhost:3000/about
+
+
+# GET /welcome
+GET http://localhost:3000/welcome
