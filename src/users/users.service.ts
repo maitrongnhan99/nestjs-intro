@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { GetUserParamDto } from './dots/get-user-param.dto';
+import { UpdateUserDto } from './dots/update-user.dto';
 import { User } from './users.type';
 
 const users: User[] = [
@@ -76,17 +78,46 @@ const users: User[] = [
 
 @Injectable()
 export class UsersService {
-  getUsers(): User[] {
+  public findAll(
+    getUserParamDto: GetUserParamDto,
+    page: number,
+    limit: number,
+  ): User[] {
+    console.log('@findAll with params', getUserParamDto, page, limit);
     return users;
   }
 
-  public createUser(user: User): User {
-    users.push(user);
+  public createUser(user: Omit<User, 'id'>): User {
+    const newUser = {
+      id: users.length + 1,
+      ...user,
+    };
+    users.push(newUser);
+    return newUser;
+  }
+
+  public findOneById(id: number): User | null {
+    const user = users.find((user) => user.id === id);
+    if (!user) {
+      return null;
+    }
     return user;
   }
 
-  public getUser(id: number): User | null {
-    const user = users.find((user) => user.id === id);
+  public updateUser(id: number, user: UpdateUserDto): User | null {
+    const index = users.findIndex((user) => user.id === id);
+    if (index === -1) {
+      return null;
+    }
+    users[index] = {
+      ...users[index],
+      ...user,
+    };
+    return users[index];
+  }
+
+  public findOneByEmail(email: string): User | null {
+    const user = users.find((user) => user.email === email);
     if (!user) {
       return null;
     }

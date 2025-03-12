@@ -1,7 +1,6 @@
 import {
   IsEmail,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsString,
   Matches,
@@ -46,9 +45,8 @@ export class CreateUserDto {
         'Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character',
     },
   )
+  @MaxLength(20, {
+    message: 'Password must be less than 20 characters long',
+  })
   password: string;
-
-  @IsNumber()
-  @IsNotEmpty()
-  id: number;
 }
