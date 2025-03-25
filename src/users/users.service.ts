@@ -76,8 +76,14 @@ const users: User[] = [
   },
 ];
 
+/**
+ * A service class that handles the logic for the users
+ */
 @Injectable()
 export class UsersService {
+  /**
+   * Find all users
+   */
   public findAll(
     getUserParamDto: GetUserParamDto,
     page: number,
@@ -87,6 +93,9 @@ export class UsersService {
     return users;
   }
 
+  /**
+   * Creates a new user
+   */
   public createUser(user: Omit<User, 'id'>): User {
     const newUser = {
       id: users.length + 1,
@@ -96,6 +105,12 @@ export class UsersService {
     return newUser;
   }
 
+  /**
+   * Finds a user by their ID
+   *
+   * @param id - The ID of the user to find
+   * @returns The user if found, null otherwise
+   */
   public findOneById(id: number): User | null {
     const user = users.find((user) => user.id === id);
     if (!user) {
@@ -104,6 +119,9 @@ export class UsersService {
     return user;
   }
 
+  /**
+   * Updates a user's information
+   */
   public updateUser(id: number, user: UpdateUserDto): User | null {
     const index = users.findIndex((user) => user.id === id);
     if (index === -1) {
@@ -116,6 +134,9 @@ export class UsersService {
     return users[index];
   }
 
+  /**
+   * Finds a user by their email address
+   */
   public findOneByEmail(email: string): User | null {
     const user = users.find((user) => user.email === email);
     if (!user) {

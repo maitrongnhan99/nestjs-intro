@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsArray,
@@ -43,6 +43,8 @@ export class CreatePostDto {
   @ApiProperty({
     description: 'The type of the post',
     example: 'post',
+    enum: PostType,
+    enumName: 'PostType',
   })
   @IsNotEmpty()
   @IsEnum(PostType, {
@@ -54,6 +56,8 @@ export class CreatePostDto {
   @ApiProperty({
     description: 'The status of the post',
     example: 'draft',
+    enum: PostStatus,
+    enumName: 'PostStatus',
   })
   @IsEnum(PostStatus, {
     message:
@@ -65,22 +69,25 @@ export class CreatePostDto {
   @ApiProperty({
     description: 'The content of the post',
     example: 'This is the content of the post',
+    required: false,
   })
   @IsString()
   @IsOptional()
   content?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'The schema of the post',
     example: 'This is the schema of the post',
+    required: false,
   })
   @IsString()
   @IsOptional()
   schema?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'The featured image url of the post',
     example: 'https://example.com/image.jpg',
+    required: false,
   })
   @IsString()
   @IsOptional()
@@ -97,6 +104,7 @@ export class CreatePostDto {
   @ApiProperty({
     description: 'The tags of the post',
     example: ['tag1', 'tag2'],
+    required: false,
   })
   @IsArray()
   @IsString({ each: true })
@@ -105,8 +113,24 @@ export class CreatePostDto {
   tags?: string[];
 
   @ApiProperty({
+    type: 'array',
     description: 'The meta options of the post',
     example: [{ key: 'metaKey', value: 'metaValue' }],
+    items: {
+      type: 'object',
+      properties: {
+        key: {
+          type: 'string',
+          description: 'The key of the meta option',
+          example: 'metaKey',
+        },
+        value: {
+          type: 'string',
+          description: 'The value of the meta option',
+          example: 'metaValue',
+        },
+      },
+    },
   })
   @IsArray()
   @IsNotEmpty()

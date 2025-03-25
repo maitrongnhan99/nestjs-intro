@@ -2,9 +2,20 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { CreatePostDto } from '../dots/create-posts.dto';
 
+/**
+ * Service responsible for handling post-related operations
+ * such as retrieving, creating, and managing posts.
+ */
 @Injectable()
 export class PostsService {
+  /**
+   * Inject the UsersService into the PostsService
+   */
   constructor(private readonly usersService: UsersService) {}
+
+  /**
+   * Retrieves all posts for a specific user
+   */
   public findAll(userId: string) {
     const user = this.usersService.findOneById(Number(userId));
     if (!user) {
@@ -74,6 +85,9 @@ export class PostsService {
     ];
   }
 
+  /**
+   * Creates a new post
+   */
   public create(createPostDto: CreatePostDto) {
     return createPostDto;
   }
