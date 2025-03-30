@@ -1,0 +1,8 @@
+### Get all meta options
+GET http://localhost:3000/meta-options
+
+### Get a specific meta option by ID
+GET http://localhost:3000/meta-options/2
+
+### Get a non-existent meta option by ID
+GET http://localhost:3000/meta-options/999

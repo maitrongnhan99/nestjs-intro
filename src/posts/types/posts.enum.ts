@@ -1,5 +1,5 @@
 enum PostType {
-  PostStatus = 'post',
+  post = 'post',
   page = 'page',
   series = 'series',
   story = 'story',

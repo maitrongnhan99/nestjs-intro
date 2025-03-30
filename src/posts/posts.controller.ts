@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePostDto } from './dots/create-posts.dto';
 import { UpdatePostDto } from './dots/patch.dto';
@@ -7,17 +16,16 @@ import { PostsService } from './services';
 @Controller('posts')
 @ApiTags('Posts')
 export class PostsController {
-  constructor(
-    /**
-     * Dependency Injection
-     * Inject the PostsService into the PostsController
-     */
-    private readonly postsService: PostsService,
-  ) {}
+  constructor(private readonly postsService: PostsService) {}
 
-  @Get('{/:userId}')
-  public getPosts(@Param('userId') userId: string) {
-    return this.postsService.findAll(userId);
+  @Get('{/:postId}')
+  public getPosts(@Param('postId', ParseIntPipe) postId: number) {
+    return this.postsService.findOneById(postId);
+  }
+
+  @Get()
+  public getAllPosts() {
+    return this.postsService.findAll();
   }
 
   @Post()
@@ -31,11 +39,11 @@ export class PostsController {
     description: 'The post has been successfully created.',
     type: CreatePostDto,
   })
-  public createPost(@Body() createPostDto: CreatePostDto) {
+  public async createPost(@Body() createPostDto: CreatePostDto) {
     return this.postsService.create(createPostDto);
   }
 
-  @Patch('{/:postId}')
+  @Patch()
   @ApiOperation({
     summary: 'Update a post',
     description: 'Allow user to update a post with the given details',
@@ -46,10 +54,20 @@ export class PostsController {
     description: 'The post has been successfully updated.',
     type: UpdatePostDto,
   })
-  public updatePost(
-    @Param('postId') postId: string,
-    @Body() updatePostDto: UpdatePostDto,
-  ) {
-    console.log(postId, updatePostDto);
+  public updatePost(@Body() updatePostDto: UpdatePostDto) {
+    return this.postsService.update(updatePostDto.id, updatePostDto);
+  }
+
+  @ApiOperation({
+    summary: 'Delete a post',
+    description: 'Allow user to delete a post with the given id',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'The post has been successfully deleted.',
+  })
+  @Delete('{/:postId}')
+  public deletePost(@Param('postId', ParseIntPipe) postId: number) {
+    return this.postsService.delete(postId);
   }
 }

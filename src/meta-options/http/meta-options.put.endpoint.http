@@ -1,0 +1,7 @@
+### Update a meta option
+PUT http://localhost:3000/meta-options/1
+Content-Type: application/json
+
+{
+  "metaValue": "{\"key\": \"updated value\", \"number\": 456, \"boolean\": false}"
+} 

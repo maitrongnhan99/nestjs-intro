@@ -10,7 +10,6 @@ import {
   Patch,
   Post,
   Query,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from 'src/auth/providers/auth.service';
@@ -60,10 +59,6 @@ export class UsersController {
 
   @Post('/create')
   public createUser(@Body() createUserDto: CreateUserDto) {
-    const isAuth = this.authService.isAuth();
-    if (!isAuth) {
-      throw new UnauthorizedException('Unauthorized');
-    }
     return this.usersService.createUser(createUserDto);
   }
 
@@ -76,7 +71,7 @@ export class UsersController {
   }
 
   @Get('/:id')
-  public getUser(@Param() params: GetUserParamDto): User | null {
-    return this.usersService.findOneById(params?.id);
+  public async getUser(@Param() params: GetUserParamDto): Promise<User | null> {
+    return await this.usersService.findOneById(Number(params?.id));
   }
 }

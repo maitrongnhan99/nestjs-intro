@@ -1,86 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateUserDto } from './dots/create-user.dto';
 import { GetUserParamDto } from './dots/get-user-param.dto';
 import { UpdateUserDto } from './dots/update-user.dto';
-import { User } from './users.type';
-
-const users: User[] = [
-  {
-    id: 1,
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-    password: 'Password123!',
-  },
-  {
-    id: 2,
-    firstName: 'Jane',
-    lastName: 'Smith',
-    email: 'jane.smith@example.com',
-    password: 'Password123!',
-  },
-  {
-    id: 3,
-    firstName: 'Michael',
-    lastName: 'Johnson',
-    email: 'michael.johnson@example.com',
-    password: 'Password123!',
-  },
-  {
-    id: 4,
-    firstName: 'Emily',
-    lastName: 'Davis',
-    email: 'emily.davis@example.com',
-    password: 'Password123!',
-  },
-  {
-    id: 5,
-    firstName: 'Robert',
-    lastName: 'Wilson',
-    email: 'robert.wilson@example.com',
-    password: 'Password123!',
-  },
-  {
-    id: 6,
-    firstName: 'Sarah',
-    lastName: 'Brown',
-    email: 'sarah.brown@example.com',
-    password: 'Password123!',
-  },
-  {
-    id: 7,
-    firstName: 'David',
-    lastName: 'Miller',
-    email: 'david.miller@example.com',
-    password: 'Password123!',
-  },
-  {
-    id: 8,
-    firstName: 'Jennifer',
-    lastName: 'Taylor',
-    email: 'jennifer.taylor@example.com',
-    password: 'Password123!',
-  },
-  {
-    id: 9,
-    firstName: 'James',
-    lastName: 'Anderson',
-    email: 'james.anderson@example.com',
-    password: 'Password123!',
-  },
-  {
-    id: 10,
-    firstName: 'Lisa',
-    lastName: 'Thomas',
-    email: 'lisa.thomas@example.com',
-    password: 'Password123!',
-  },
-];
-
+import { User } from './user.entity';
 /**
  * A service class that handles the logic for the users
  */
 @Injectable()
 export class UsersService {
+  constructor(
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
+
+    private readonly configService: ConfigService,
+  ) {}
   /**
    * Find all users
    */
@@ -90,19 +26,25 @@ export class UsersService {
     limit: number,
   ): User[] {
     console.log('@findAll with params', getUserParamDto, page, limit);
-    return users;
+    const s3BucketName = this.configService.get<string>('S3_BUCKET_NAME');
+    console.log('@s3BucketName', s3BucketName);
+    return [];
   }
 
   /**
    * Creates a new user
    */
-  public createUser(user: Omit<User, 'id'>): User {
-    const newUser = {
-      id: users.length + 1,
-      ...user,
-    };
-    users.push(newUser);
-    return newUser;
+  public async createUser(createUserDto: CreateUserDto): Promise<User> {
+    // check if the user already exists
+    const user = await this.usersRepository.findOne({
+      where: { email: createUserDto.email },
+    });
+    if (user) {
+      throw new ConflictException('User already exists');
+    }
+
+    const newUser = this.usersRepository.create(createUserDto);
+    return this.usersRepository.save(newUser);
   }
 
   /**
@@ -111,37 +53,29 @@ export class UsersService {
    * @param id - The ID of the user to find
    * @returns The user if found, null otherwise
    */
-  public findOneById(id: number): User | null {
-    const user = users.find((user) => user.id === id);
-    if (!user) {
-      return null;
-    }
-    return user;
+  public async findOneById(id: number): Promise<User | null> {
+    return await this.usersRepository.findOne({
+      where: { id },
+    });
   }
 
   /**
    * Updates a user's information
    */
-  public updateUser(id: number, user: UpdateUserDto): User | null {
-    const index = users.findIndex((user) => user.id === id);
-    if (index === -1) {
-      return null;
-    }
-    users[index] = {
-      ...users[index],
-      ...user,
-    };
-    return users[index];
+  public async updateUser(
+    id: number,
+    user: UpdateUserDto,
+  ): Promise<User | null> {
+    await this.usersRepository.update(id, user);
+    return await this.findOneById(id);
   }
 
   /**
    * Finds a user by their email address
    */
-  public findOneByEmail(email: string): User | null {
-    const user = users.find((user) => user.email === email);
-    if (!user) {
-      return null;
-    }
-    return user;
+  public async findOneByEmail(email: string): Promise<User | null> {
+    return await this.usersRepository.findOne({
+      where: { email },
+    });
   }
 }

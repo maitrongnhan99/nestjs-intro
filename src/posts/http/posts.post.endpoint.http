@@ -7,21 +7,48 @@ Authorization: Bearer token
   "title": "Sample Post Title",
   "slug": "sample-post-slug",
   "postType": "post",
-  "status": "draft1",
+  "status": "draft",
   "content": "This is the content of the sample post. It can contain markdown or other formatting.",
   "schema": "{}",
   "featuredImageUrl": "https://example.com/image.jpg",
-  "publishOn": "2025-03-12T00:00:00.000",
+  "publishOn": "2025-03-12T00:00:00.000Z",
   "tags": ["sample", "test", "example"],
-  "metaOptions": [
-    {
-      "key": "description",
-      "value": "Meta description for SEO purposes"
-    },
-    {
-      "key": "keywords",
-      "value": "sample,test,api"
-    }
-  ]
+  "metaOptions": {
+    "metaValue": "{\"description\":\"Meta description for SEO purposes\",\"keywords\":\"sample,test,api\"}"
+  }
+}
+
+### Create a post with minimum required fields
+POST http://localhost:3000/posts
+Content-Type: application/json
+Authorization: Bearer token
+
+{
+  "title": "Minimum Required Post",
+  "slug": "minimum-required-post",
+  "postType": "post",
+  "status": "draft",
+  "publishOn": "2025-03-12T00:00:00.000Z"
+}
+
+### Create a post with all possible types
+POST http://localhost:3000/posts
+Content-Type: application/json
+Authorization: Bearer token
+
+{ 
+  "title": "All Types Post",
+  "slug": "all-ty2pes-2post-123455672222",
+  "postType": "series",
+  "status": "published",
+  "content": "Content for all types post",
+  "schema": "{\"customField\":\"value\"}",
+  "featuredImageUrl": "https://example.com/featured.jpg",
+  "publishOn": "2025-03-12T07:00:00.000Z",
+  "metaOptions": {
+    "metaValue": "{\"seo_title\":\"SEO Title\",\"description\":\"Meta description\",\"keywords\":\"key1,key2\"}"
+  },
+  "authorId": 1,
+  "tags": [5,1]
 }
 

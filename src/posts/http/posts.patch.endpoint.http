@@ -1,0 +1,10 @@
+
+PATCH http://localhost:3000/posts
+Content-Type: application/json
+Authorization: Bearer token
+
+{
+  "id": 10,
+  "title": "Updated Post with Typescript",
+  "tags": [6, 7]
+}

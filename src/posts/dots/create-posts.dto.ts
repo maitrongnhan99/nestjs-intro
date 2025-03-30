@@ -2,17 +2,18 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
   IsArray,
-  IsDate,
+  IsDateString,
   IsEnum,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   Matches,
   MinLength,
   ValidateNested,
 } from 'class-validator';
+import { CreatePostsMetaOptionsDto } from '../../meta-options/dtos/create-posts-meta-options.dto';
 import { PostStatus, PostType } from '../types';
-import { CreatePostsMetaOptionsDto } from './create-posts-meta-options.dto';
 export class CreatePostDto {
   @ApiProperty({
     description: 'The title of the post',
@@ -97,44 +98,42 @@ export class CreatePostDto {
     description: 'The publish date of the post',
     example: '2021-01-01',
   })
-  @IsDate()
+  @IsDateString()
   @IsNotEmpty()
   publishOn: Date;
 
   @ApiProperty({
-    description: 'The tags of the post',
-    example: ['tag1', 'tag2'],
+    description: 'Ids of the tags of the post',
+    example: [1, 2],
     required: false,
   })
   @IsArray()
-  @IsString({ each: true })
   @IsOptional()
-  @MinLength(3, { each: true })
-  tags?: string[];
+  @IsNumber({}, { each: true })
+  tags?: number[];
 
   @ApiProperty({
-    type: 'array',
+    type: 'object',
     description: 'The meta options of the post',
-    example: [{ key: 'metaKey', value: 'metaValue' }],
-    items: {
-      type: 'object',
-      properties: {
-        key: {
-          type: 'string',
-          description: 'The key of the meta option',
-          example: 'metaKey',
-        },
-        value: {
-          type: 'string',
-          description: 'The value of the meta option',
-          example: 'metaValue',
-        },
+    example: { metaValue: '{"key": "value", "number": 123, "boolean": true}' },
+    properties: {
+      metaValue: {
+        type: 'json',
+        description: 'The value of the meta option in JSON format',
+        example: '{"key": "value", "number": 123, "boolean": true}',
       },
     },
   })
-  @IsArray()
-  @IsNotEmpty()
+  @IsOptional()
   @ValidateNested({ each: true })
   @Type(() => CreatePostsMetaOptionsDto)
-  metaOptions: CreatePostsMetaOptionsDto[];
+  metaOptions?: CreatePostsMetaOptionsDto;
+
+  @ApiProperty({
+    description: 'The author id of the post',
+    example: 1,
+  })
+  @IsNumber()
+  @IsNotEmpty()
+  authorId: number;
 }

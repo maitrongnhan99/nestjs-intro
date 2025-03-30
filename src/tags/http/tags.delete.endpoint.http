@@ -1,0 +1,8 @@
+
+DELETE http://localhost:3000/tags/5
+Authorization: Bearer token
+
+###
+
+DELETE http://localhost:3000/tags/soft/6
+Authorization: Bearer token

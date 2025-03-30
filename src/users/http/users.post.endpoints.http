@@ -3,7 +3,7 @@ POST http://localhost:3000/users/create
 Content-Type: application/json
 
 {
-  "email": "john.doe@hihi.ai",
+  "email": "john.doe1@hihi.ai",
   "password": "12345678@Aafsda",
   "firstName": "John",
   "lastName": "Doe"
