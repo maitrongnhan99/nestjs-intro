@@ -1,15 +1,21 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
+import { PaginationModule } from 'src/common/pagination/pagination.module';
+import appConfig from 'src/config/app.config';
+import databaseConfig from 'src/config/database.config';
+import environmentsValidation from 'src/config/evironments.validation';
 import { MetaOptionsModule } from 'src/meta-options/meta-options.module';
 import { PostsModule } from 'src/posts/posts.module';
 import { TagsModule } from 'src/tags/tags.module';
 import { UsersModule } from 'src/users/users.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+const ENV = process.env.NODE_ENV;
 @Module({
   imports: [
+    PaginationModule,
     UsersModule,
     PostsModule,
     AuthModule,
@@ -17,21 +23,23 @@ import { AppService } from './app.service';
     MetaOptionsModule,
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: !ENV ? '.env' : `.env.${ENV}`,
+      load: [appConfig, databaseConfig],
+      validationSchema: environmentsValidation,
     }),
     TypeOrmModule.forRootAsync({
-      useFactory: () => ({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: 'localhost',
-        port: 5432,
-        username: 'postgres',
-        password: 'maitrongnhan99',
-        database: 'nestjs-blog',
-        // entities: [User, Post, Tag, MetaOption],
-        autoLoadEntities: true,
-        synchronize: true,
+        host: configService.get('database.host'),
+        port: +configService.get('database.port'),
+        username: configService.get('database.username'),
+        password: configService.get('database.password'),
+        database: configService.get('database.database'),
+        autoLoadEntities: configService.get('database.autoLoad'),
+        synchronize: configService.get('database.synchronize'),
       }),
-      inject: [],
-      imports: [],
     }),
   ],
   controllers: [AppController],

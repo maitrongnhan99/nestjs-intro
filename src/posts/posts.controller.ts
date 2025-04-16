@@ -7,9 +7,11 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePostDto } from './dots/create-posts.dto';
+import { GetPostsDto } from './dots/get-posts.dto';
 import { UpdatePostDto } from './dots/patch.dto';
 import { PostsService } from './services';
 
@@ -18,9 +20,12 @@ import { PostsService } from './services';
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
-  @Get('{/:postId}')
-  public getPosts(@Param('postId', ParseIntPipe) postId: number) {
-    return this.postsService.findOneById(postId);
+  @Get('{/:userId}')
+  public getPosts(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Query() getPostsDto: GetPostsDto,
+  ) {
+    return this.postsService.findByAuthorId(userId, getPostsDto);
   }
 
   @Get()

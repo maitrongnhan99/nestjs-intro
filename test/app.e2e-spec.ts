@@ -17,9 +17,20 @@ describe('AppController (e2e)', () => {
   });
 
   it('/ (GET)', () => {
+    console.log('@NODE_ENV', process.env.NODE_ENV);
+    console.log('@S3_BUCKET_NAME', process.env.S3_BUCKET_NAME);
     return request(app.getHttpServer())
       .get('/')
       .expect(200)
       .expect('Hello World!');
+  });
+
+  it('/users (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/users')
+      .expect(200)
+      .expect((res) => {
+        expect(res.body).toBeInstanceOf(Array);
+      });
   });
 });

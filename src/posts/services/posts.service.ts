@@ -1,9 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  RequestTimeoutException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationProvider } from 'src/common/pagination/providers/pagination.provider';
 import { TagsService } from 'src/tags/providers';
-import { UsersService } from 'src/users/users.service';
+import { Tag } from 'src/tags/tag.entity';
+import { UsersService } from 'src/users/providers/users.service';
 import { Repository } from 'typeorm';
 import { CreatePostDto } from '../dots/create-posts.dto';
+import { GetPostsDto } from '../dots/get-posts.dto';
 import { UpdatePostDto } from '../dots/patch.dto';
 import { Post } from '../post.entity';
 /**
@@ -20,6 +28,8 @@ export class PostsService {
     private readonly tagsService: TagsService,
     @InjectRepository(Post)
     private readonly postsRepository: Repository<Post>,
+
+    private readonly paginationProvider: PaginationProvider,
   ) {}
 
   /**
@@ -27,6 +37,13 @@ export class PostsService {
    */
   public findAll() {
     return this.postsRepository.find();
+  }
+
+  public findByAuthorId(userId: number, getPostsDto: GetPostsDto) {
+    return this.paginationProvider.paginateQuery(
+      getPostsDto,
+      this.postsRepository,
+    );
   }
 
   /**
@@ -66,12 +83,33 @@ export class PostsService {
   }
 
   public async update(id: number, updatePostDto: UpdatePostDto) {
-    const post = await this.findOneById(id);
-    if (!post) {
-      throw new Error('Post not found');
+    let post: Post | null;
+    try {
+      post = await this.findOneById(id);
+    } catch {
+      throw new RequestTimeoutException(
+        'Database connection timeout, please try again later',
+      );
     }
 
-    const tags = await this.tagsService.findAllByIds(updatePostDto.tags ?? []);
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
+
+    let tags: Tag[] = [];
+    try {
+      tags = await this.tagsService.findAllByIds(updatePostDto.tags ?? []);
+    } catch {
+      throw new RequestTimeoutException(
+        'Database connection timeout, please try again later',
+      );
+    }
+
+    if (!tags || tags?.length !== (updatePostDto.tags?.length ?? 0)) {
+      throw new BadRequestException(
+        'Please check your tag ids and make sure they are valid',
+      );
+    }
 
     post.title = updatePostDto.title ?? post.title;
     post.slug = updatePostDto.slug ?? post.slug;
@@ -83,6 +121,15 @@ export class PostsService {
     post.schema = updatePostDto.schema ?? post.schema;
     post.tags = updatePostDto.tags ? tags : post.tags;
 
-    return await this.postsRepository.save(post);
+    let updatedPost: Post;
+    try {
+      updatedPost = await this.postsRepository.save(post);
+    } catch {
+      throw new RequestTimeoutException(
+        'Database connection timeout, please try again later',
+      );
+    }
+
+    return updatedPost;
   }
 }

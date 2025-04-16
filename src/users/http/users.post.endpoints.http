@@ -8,3 +8,26 @@ Content-Type: application/json
   "firstName": "John",
   "lastName": "Doe"
 }
+
+###
+
+# POST /users/create-many
+POST http://localhost:3000/users/create-many
+Content-Type: application/json
+
+{
+  "users": [
+    {
+    "email": "john.d11111e132131@hihi.ai",
+    "password": "12345672811@Aafsda",
+    "firstName": "John",
+      "lastName": "Doe"
+    },
+    {
+      "email": "jo2hn.d11o2321@hihi.ai",
+      "password": "1232456718@Aafsda",
+      "firstName": "John",
+      "lastName": "Doe"
+    }
+  ]
+}

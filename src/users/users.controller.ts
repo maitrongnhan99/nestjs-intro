@@ -11,12 +11,19 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AuthService } from 'src/auth/providers/auth.service';
+import { CreateManyUserDto } from './dots/create-many-user.dto';
 import { CreateUserDto } from './dots/create-user.dto';
 import { GetUserParamDto } from './dots/get-user-param.dto';
 import { UpdateUserDto } from './dots/update-user.dto';
-import { UsersService } from './users.service';
+import { UsersService } from './providers/users.service';
 import { User } from './users.type';
 
 @Controller('users')
@@ -73,5 +80,21 @@ export class UsersController {
   @Get('/:id')
   public async getUser(@Param() params: GetUserParamDto): Promise<User | null> {
     return await this.usersService.findOneById(Number(params?.id));
+  }
+
+  @Post('/create-many')
+  @ApiOperation({
+    summary: 'Create many users',
+    description: 'Create many users with an array of users',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'The users have been successfully created.',
+  })
+  @ApiBody({ type: [CreateUserDto] })
+  public async createManyUsers(
+    @Body() data: CreateManyUserDto,
+  ): Promise<{ data: User[] }> {
+    return this.usersService.createManyUsers(data);
   }
 }

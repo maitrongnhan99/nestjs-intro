@@ -1,7 +1,14 @@
 
 ### Get Post By ID
+{{
+   const date = new Date();
 
-GET http://localhost:3000/posts/19
+   exports.startDate = date.toISOString();
+   exports.endDate = date.toISOString();
+   exports.page = 1;
+   exports.limit = 10;
+}}
+GET http://localhost:3000/posts/3?page=1&limit=2
 
 
 ### Get All Posts

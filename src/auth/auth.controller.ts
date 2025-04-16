@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/users/providers/users.service';
 import { AuthService } from './providers/auth.service';
 
 @Controller('auth')
