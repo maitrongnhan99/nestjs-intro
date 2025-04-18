@@ -1,0 +1,9 @@
+
+
+POST http://localhost:3000/auth/sign-in
+Content-Type: application/json
+
+{
+  "email": "john.dfsdafdasfoe22@hihi.ai",
+  "password": "12345678@Aafsda"
+}

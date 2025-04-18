@@ -1,5 +1,4 @@
 import {
-  ConflictException,
   Inject,
   Injectable,
   NotFoundException,
@@ -14,7 +13,9 @@ import { CreateUserDto } from '../dots/create-user.dto';
 import { GetUserParamDto } from '../dots/get-user-param.dto';
 import { UpdateUserDto } from '../dots/update-user.dto';
 import { User } from '../user.entity';
+import { CreateUserProvider } from './create-user.provider';
 import { CreateManyUsersService } from './createManyUsers.service';
+import { FindOneUserByEmailProvider } from './find-one-user-by-email.provider';
 
 @Injectable()
 export class UsersService {
@@ -30,6 +31,12 @@ export class UsersService {
 
     @Inject()
     private readonly createManyUsersService: CreateManyUsersService,
+
+    @Inject()
+    private readonly createUserProvider: CreateUserProvider,
+
+    @Inject()
+    private readonly findOneUserByEmailProvider: FindOneUserByEmailProvider,
   ) {}
   /**
    * Find all users
@@ -45,32 +52,9 @@ export class UsersService {
     return [];
   }
 
-  private async checkUserExists(email: string): Promise<boolean> {
-    try {
-      const user = await this.usersRepository.findOne({
-        where: { email },
-      });
-      return Boolean(user);
-    } catch {
-      throw new RequestTimeoutException('Database connection failed', {
-        description: 'Request timeout when connecting to the database',
-      });
-    }
-  }
-
   /**
    * Creates a new user
    */
-  public async createUser(createUserDto: CreateUserDto): Promise<User> {
-    // check if the user already exists
-    const userExists = await this.checkUserExists(createUserDto.email);
-    if (userExists) {
-      throw new ConflictException('User already exists');
-    }
-
-    const newUser = this.usersRepository.create(createUserDto);
-    return this.usersRepository.save(newUser);
-  }
 
   /**
    * Finds a user by their ID
@@ -94,6 +78,10 @@ export class UsersService {
     }
   }
 
+  public async createUser(createUserDto: CreateUserDto): Promise<User> {
+    return await this.createUserProvider.createUser(createUserDto);
+  }
+
   /**
    * Updates a user's information
    */
@@ -109,9 +97,7 @@ export class UsersService {
    * Finds a user by their email address
    */
   public async findOneByEmail(email: string): Promise<User | null> {
-    return await this.usersRepository.findOne({
-      where: { email },
-    });
+    return await this.findOneUserByEmailProvider.findOneByEmail(email);
   }
 
   public async createManyUsers(

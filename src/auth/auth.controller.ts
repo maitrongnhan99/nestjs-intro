@@ -2,12 +2,15 @@ import {
   Body,
   Controller,
   forwardRef,
+  HttpCode,
+  HttpStatus,
   Inject,
   Post,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UsersService } from 'src/users/providers/users.service';
+import { SignInDto } from './dtos/signin';
 import { AuthService } from './providers/auth.service';
 
 @Controller('auth')
@@ -20,11 +23,17 @@ export class AuthController {
   ) {}
 
   @Post('login')
-  login(@Body() body: { email: string; password: string }) {
-    const user = this.usersService.findOneByEmail(body.email);
+  async login(@Body() body: { email: string; password: string }) {
+    const user = await this.usersService.findOneByEmail(body.email);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
     return this.authService.login(body.email, body.password);
+  }
+
+  @Post('sign-in')
+  @HttpCode(HttpStatus.OK)
+  signIn(@Body() signInDto: SignInDto) {
+    return this.authService.signIn(signInDto);
   }
 }

@@ -6,6 +6,7 @@ import { PaginationModule } from 'src/common/pagination/pagination.module';
 import appConfig from 'src/config/app.config';
 import databaseConfig from 'src/config/database.config';
 import environmentsValidation from 'src/config/evironments.validation';
+import jwtConfig from 'src/config/jwt.config';
 import { MetaOptionsModule } from 'src/meta-options/meta-options.module';
 import { PostsModule } from 'src/posts/posts.module';
 import { TagsModule } from 'src/tags/tags.module';
@@ -24,7 +25,7 @@ const ENV = process.env.NODE_ENV;
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: !ENV ? '.env' : `.env.${ENV}`,
-      load: [appConfig, databaseConfig],
+      load: [appConfig, databaseConfig, jwtConfig],
       validationSchema: environmentsValidation,
     }),
     TypeOrmModule.forRootAsync({

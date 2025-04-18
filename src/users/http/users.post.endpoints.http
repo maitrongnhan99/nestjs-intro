@@ -1,9 +1,9 @@
 # POST /users/create
 POST http://localhost:3000/users/create
 Content-Type: application/json
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE5LCJlbWFpbCI6ImpvaG4uZGZzZGFmZGFzZm9lMjJAaGloaS5haSIsImlhdCI6MTc0NDkwMzk2NSwiZXhwIjoxNzQ0OTA3NTY1LCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.b0tR_MZhBWd8xtD5mF-fVBd7HdxZxl9bhmm3qwikAXY
 {
-  "email": "john.doe1@hihi.ai",
+  "email": "john.dfsdafd22asfofdfdfdfe22@hihi.ai",
   "password": "12345678@Aafsda",
   "firstName": "John",
   "lastName": "Doe"
