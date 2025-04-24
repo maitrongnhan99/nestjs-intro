@@ -10,7 +10,6 @@ import {
   Patch,
   Post,
   Query,
-  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBody,
@@ -19,7 +18,8 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { AccessTokenGuard } from 'src/auth/guards/access-token/access-token.guard';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { AuthType } from 'src/auth/enums/auth-type.enum';
 import { AuthService } from 'src/auth/providers/auth.service';
 import { CreateManyUserDto } from './dots/create-many-user.dto';
 import { CreateUserDto } from './dots/create-user.dto';
@@ -66,8 +66,8 @@ export class UsersController {
     return this.usersService.findAll(getUserParamDto, page, limit);
   }
 
-  @UseGuards(AccessTokenGuard)
   @Post('/create')
+  @Auth(AuthType.Bearer)
   public createUser(@Body() createUserDto: CreateUserDto) {
     return this.usersService.createUser(createUserDto);
   }
@@ -95,6 +95,7 @@ export class UsersController {
     description: 'The users have been successfully created.',
   })
   @ApiBody({ type: [CreateUserDto] })
+  @Auth(AuthType.Bearer)
   public async createManyUsers(
     @Body() data: CreateManyUserDto,
   ): Promise<{ data: User[] }> {

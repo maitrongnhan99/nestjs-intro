@@ -13,4 +13,8 @@ export default Joi.object({
   DATABASE_SYNCHRONIZE: Joi.boolean().required().default(true),
   DATABASE_AUTOLOAD: Joi.boolean().required().default(true),
   PROFILE_API_KEY: Joi.string().required().default('some-secret-key'),
+  JWT_SECRET: Joi.string().required().default('some-secret-key-for-jwt'),
+  JWT_TOKEN_AUDIENCE: Joi.string().required().default('localhost:3000'),
+  JWT_TOKEN_ISSUER: Joi.string().required().default('localhost:3000'),
+  JWT_ACCESS_TOKEN_TTL: Joi.number().required().default(3600),
 });
