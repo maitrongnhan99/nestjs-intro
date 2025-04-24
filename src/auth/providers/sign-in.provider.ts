@@ -9,6 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import jwtConfig from 'src/config/jwt.config';
 import { UsersService } from 'src/users/providers/users.service';
 import { SignInDto } from '../dtos/signin';
+import { ActiveUserData } from '../interfaces/active-user-data.interface';
 import { HashingProvider } from './hashing.provider';
 
 @Injectable()
@@ -43,7 +44,7 @@ export class SignInProvider {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const payload = {
+    const payload: ActiveUserData = {
       sub: user.id,
       email: user.email,
     };

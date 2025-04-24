@@ -7,8 +7,9 @@ import { UsersModule } from 'src/users/users.module';
 import { Post } from './post.entity';
 import { PostsController } from './posts.controller';
 import { PostsService } from './services';
+import { CreatePostService } from './services/create-post.service';
 @Module({
-  providers: [PostsService],
+  providers: [PostsService, CreatePostService],
   controllers: [PostsController],
   imports: [
     UsersModule,

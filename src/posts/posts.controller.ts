@@ -10,6 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import ActiveUser from 'src/auth/decorators/active-user.decorator';
 import { CreatePostDto } from './dots/create-posts.dto';
 import { GetPostsDto } from './dots/get-posts.dto';
 import { UpdatePostDto } from './dots/patch.dto';
@@ -44,8 +45,11 @@ export class PostsController {
     description: 'The post has been successfully created.',
     type: CreatePostDto,
   })
-  public async createPost(@Body() createPostDto: CreatePostDto) {
-    return this.postsService.create(createPostDto);
+  public async createPost(
+    @Body() createPostDto: CreatePostDto,
+    @ActiveUser('sub') userId: number,
+  ) {
+    return this.postsService.create(createPostDto, userId);
   }
 
   @Patch()

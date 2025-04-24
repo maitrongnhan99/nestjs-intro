@@ -2,11 +2,11 @@
 ### Create a post with all possible types
 POST http://localhost:3000/posts
 Content-Type: application/json
-Authorization: Bearer token
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE5LCJlbWFpbCI6ImpvaG4uZGZzZGFmZGFzZm9lMjJAaGloaS5haSIsImlhdCI6MTc0NTUwODE1OCwiZXhwIjoxNzQ1NTExNzU4LCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.b0YVBHYQKul23_PaH_uKc9tnFKmljm-MnIdI5oXxgW4
 
 { 
   "title": "The Future of AI in Healthcare",
-  "slug": "future-ai-healthcare-9",
+  "slug": "future-ai-healthcare--2",
   "postType": "post",
   "status": "published",
   "content": "Artificial intelligence is revolutionizing healthcare delivery and patient outcomes...",

@@ -14,6 +14,7 @@ import { CreatePostDto } from '../dots/create-posts.dto';
 import { GetPostsDto } from '../dots/get-posts.dto';
 import { UpdatePostDto } from '../dots/patch.dto';
 import { Post } from '../post.entity';
+import { CreatePostService } from './create-post.service';
 /**
  * Service responsible for handling post-related operations
  * such as retrieving, creating, and managing posts.
@@ -30,6 +31,7 @@ export class PostsService {
     private readonly postsRepository: Repository<Post>,
 
     private readonly paginationProvider: PaginationProvider,
+    private readonly createPostService: CreatePostService,
   ) {}
 
   /**
@@ -49,18 +51,8 @@ export class PostsService {
   /**
    * Creates a new post
    */
-  public async create(createPostDto: CreatePostDto) {
-    const author = await this.usersService.findOneById(createPostDto.authorId);
-    if (!author) {
-      throw new Error('Author not found');
-    }
-    const tags = await this.tagsService.findAllByIds(createPostDto.tags ?? []);
-    const post = this.postsRepository.create({
-      ...createPostDto,
-      author,
-      tags,
-    });
-    return await this.postsRepository.save(post);
+  public async create(createPostDto: CreatePostDto, userId: number) {
+    return this.createPostService.create(createPostDto, userId);
   }
 
   public async delete(id: number) {
