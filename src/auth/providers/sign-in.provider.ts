@@ -9,7 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import jwtConfig from 'src/config/jwt.config';
 import { UsersService } from 'src/users/providers/users.service';
 import { SignInDto } from '../dtos/signin';
-import { ActiveUserData } from '../interfaces/active-user-data.interface';
+import { GenerateTokenProvider } from './generate-token.provider';
 import { HashingProvider } from './hashing.provider';
 
 @Injectable()
@@ -26,6 +26,9 @@ export class SignInProvider {
 
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
+
+    @Inject()
+    private readonly generateTokenProvider: GenerateTokenProvider,
   ) {}
 
   public async signIn(signInDto: SignInDto) {
@@ -44,20 +47,12 @@ export class SignInProvider {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const payload: ActiveUserData = {
-      sub: user.id,
-      email: user.email,
-    };
-
-    const accessToken = await this.jwtService.signAsync(payload, {
-      secret: this.jwtConfiguration.secret,
-      audience: this.jwtConfiguration.audience,
-      issuer: this.jwtConfiguration.issuer,
-      expiresIn: this.jwtConfiguration.accessTokenTtl,
-    });
+    const { accessToken, refreshToken } =
+      await this.generateTokenProvider.generateToken(user);
 
     return {
       accessToken,
+      refreshToken,
     };
   }
 }

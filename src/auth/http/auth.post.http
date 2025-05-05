@@ -4,6 +4,16 @@ POST http://localhost:3000/auth/sign-in
 Content-Type: application/json
 
 {
-  "email": "john.dfsdafdasfoe22@hihi.ai",
+  "email": "maitrongnhan@hihi.ai",
   "password": "12345678@Aafsda"
+}
+
+###
+
+POST http://localhost:3000/auth/refresh-token
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoibWFpdHJvbmduaGFuQGhpaGkuYWkiLCJpYXQiOjE3NDY0NTc3MzAsImV4cCI6MTc0NjQ2MTMzMCwiYXVkIjoibG9jYWxob3N0OjMwMDAiLCJpc3MiOiJsb2NhbGhvc3Q6MzAwMCJ9.tsKbRn6SmS42vNKK_BVM_hdujSvKPDCRUNNjMnGFlG4
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImlhdCI6MTc0NjQ1NzczMCwiZXhwIjoxNzQ2NTQ0MTMwLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.fqfRD5I5oHWKmsaYDTUnMsYPuIXo8KcEFV1T-JBHPeU"
 }

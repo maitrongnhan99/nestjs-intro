@@ -7,7 +7,9 @@ import { AuthController } from './auth.controller';
 import { AccessTokenGuard } from './guards/access-token/access-token.guard';
 import { AuthService } from './providers/auth.service';
 import { BcryptProvider } from './providers/bcrypt.provider';
+import { GenerateTokenProvider } from './providers/generate-token.provider';
 import { HashingProvider } from './providers/hashing.provider';
+import { RefreshTokenProvider } from './providers/refresh-token.provider';
 import { SignInProvider } from './providers/sign-in.provider';
 @Module({
   providers: [
@@ -18,6 +20,8 @@ import { SignInProvider } from './providers/sign-in.provider';
     },
     SignInProvider,
     AccessTokenGuard,
+    GenerateTokenProvider,
+    RefreshTokenProvider,
   ],
   controllers: [AuthController],
   exports: [AuthService, HashingProvider],
