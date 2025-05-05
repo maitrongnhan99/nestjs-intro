@@ -5,8 +5,8 @@ import {
   RequestTimeoutException,
 } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
-import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import profileConfig from '../config/profileConfig.config';
 import { CreateManyUserDto } from '../dots/create-many-user.dto';
 import { CreateUserDto } from '../dots/create-user.dto';
@@ -25,9 +25,6 @@ export class UsersService {
 
     @Inject(profileConfig.KEY)
     private readonly profileConfiguration: ConfigType<typeof profileConfig>,
-
-    @InjectDataSource()
-    private readonly dataSource: DataSource,
 
     @Inject()
     private readonly createManyUsersService: CreateManyUsersService,

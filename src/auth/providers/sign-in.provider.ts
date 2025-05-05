@@ -40,7 +40,7 @@ export class SignInProvider {
 
     const isPasswordValid = await this.hashingProvider.comparePassword(
       signInDto.password,
-      user.password,
+      user.password || '',
     );
 
     if (!isPasswordValid) {
