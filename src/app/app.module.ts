@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
 import { AccessTokenGuard } from 'src/auth/guards/access-token/access-token.guard';
 import { AuthenticationGuard } from 'src/auth/guards/authentication/authentication.guard';
+import { DataResponseInterceptor } from 'src/common/interceptors';
 import { PaginationModule } from 'src/common/pagination/pagination.module';
 import appConfig from 'src/config/app.config';
 import databaseConfig from 'src/config/database.config';
@@ -14,6 +15,7 @@ import jwtConfig from 'src/config/jwt.config';
 import { MetaOptionsModule } from 'src/meta-options/meta-options.module';
 import { PostsModule } from 'src/posts/posts.module';
 import { TagsModule } from 'src/tags/tags.module';
+import { UploadsModule } from 'src/uploads/uploads.module';
 import { UsersModule } from 'src/users/users.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -27,6 +29,7 @@ const ENV = process.env.NODE_ENV;
     PostsModule,
     AuthModule,
     TagsModule,
+    UploadsModule,
     MetaOptionsModule,
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forRoot({
@@ -56,6 +59,10 @@ const ENV = process.env.NODE_ENV;
     {
       provide: APP_GUARD,
       useClass: AuthenticationGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: DataResponseInterceptor,
     },
     AccessTokenGuard,
   ],

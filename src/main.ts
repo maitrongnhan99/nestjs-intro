@@ -1,6 +1,8 @@
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { config } from 'aws-sdk';
 import { AppModule } from './app';
 
 async function bootstrap() {
@@ -19,7 +21,7 @@ async function bootstrap() {
   /**
    * Initial Swagger
    */
-  const config = new DocumentBuilder()
+  const swaggerConfig = new DocumentBuilder()
     .setTitle('NestJS Blog API')
     .setDescription(
       'API for managing blog posts, based on NestJS, based url is http://localhost:3000',
@@ -30,8 +32,18 @@ async function bootstrap() {
     .setVersion('1.0')
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
+
+  //set up aws sdk
+  const configService = app.get(ConfigService);
+  config.update({
+    credentials: {
+      accessKeyId: configService.get('app.awsAccessKeyId') as string,
+      secretAccessKey: configService.get('app.awsSecretAccessKey') as string,
+    },
+    region: configService.get('app.awsRegion') as string,
+  });
 
   app.enableCors();
   await app.listen(process.env.PORT ?? 3000);
