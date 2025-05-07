@@ -5,8 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
 import jwtConfig from 'src/config/jwt.config';
 import profileConfig from './config/profileConfig.config';
+import { CreateGoogleUserProvider } from './providers/create-google-user.provider';
 import { CreateUserProvider } from './providers/create-user.provider';
 import { CreateManyUsersService } from './providers/createManyUsers.service';
+import { FindOneByGoogleIdProvider } from './providers/find-one-by-google-id.provider';
 import { FindOneUserByEmailProvider } from './providers/find-one-user-by-email.provider';
 import { UsersService } from './providers/users.service';
 import { User } from './user.entity';
@@ -17,6 +19,8 @@ import { UsersController } from './users.controller';
     CreateManyUsersService,
     CreateUserProvider,
     FindOneUserByEmailProvider,
+    FindOneByGoogleIdProvider,
+    CreateGoogleUserProvider,
   ],
   controllers: [UsersController],
   exports: [UsersService],

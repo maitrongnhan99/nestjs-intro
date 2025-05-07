@@ -12,9 +12,12 @@ import { CreateManyUserDto } from '../dots/create-many-user.dto';
 import { CreateUserDto } from '../dots/create-user.dto';
 import { GetUserParamDto } from '../dots/get-user-param.dto';
 import { UpdateUserDto } from '../dots/update-user.dto';
+import { GoogleUser } from '../interfaces/google-user.interface';
 import { User } from '../user.entity';
+import { CreateGoogleUserProvider } from './create-google-user.provider';
 import { CreateUserProvider } from './create-user.provider';
 import { CreateManyUsersService } from './createManyUsers.service';
+import { FindOneByGoogleIdProvider } from './find-one-by-google-id.provider';
 import { FindOneUserByEmailProvider } from './find-one-user-by-email.provider';
 
 @Injectable()
@@ -34,6 +37,12 @@ export class UsersService {
 
     @Inject()
     private readonly findOneUserByEmailProvider: FindOneUserByEmailProvider,
+
+    @Inject()
+    private readonly findOneByGoogleIdProvider: FindOneByGoogleIdProvider,
+
+    @Inject()
+    private readonly createGoogleUserProvider: CreateGoogleUserProvider,
   ) {}
   /**
    * Find all users
@@ -101,5 +110,13 @@ export class UsersService {
     data: CreateManyUserDto,
   ): Promise<{ data: User[] }> {
     return this.createManyUsersService.createManyUsers(data);
+  }
+
+  public async findOneByGoogleId(googleId: string): Promise<User | null> {
+    return this.findOneByGoogleIdProvider.findOneByGoogleId(googleId);
+  }
+
+  public async createGoogleUser(googleUser: GoogleUser): Promise<User> {
+    return await this.createGoogleUserProvider.createGoogleUser(googleUser);
   }
 }

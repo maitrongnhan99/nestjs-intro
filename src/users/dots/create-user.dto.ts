@@ -58,7 +58,7 @@ export class CreateUserDto {
     maxLength: 20,
   })
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   @MinLength(8, {
     message: 'Password must be at least 8 characters long',
   })
@@ -72,5 +72,14 @@ export class CreateUserDto {
   @MaxLength(20, {
     message: 'Password must be less than 20 characters long',
   })
-  password: string;
+  password?: string;
+
+  @ApiProperty({
+    description: 'The Google ID of the user',
+    example: '1234567890',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  googleId?: string;
 }

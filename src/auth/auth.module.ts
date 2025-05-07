@@ -11,7 +11,7 @@ import { GenerateTokenProvider } from './providers/generate-token.provider';
 import { HashingProvider } from './providers/hashing.provider';
 import { RefreshTokenProvider } from './providers/refresh-token.provider';
 import { SignInProvider } from './providers/sign-in.provider';
-import { GoogleAuthentiocationController } from './social/google-authentiocation.controller';
+import { GoogleAuthenticationController } from './social/google-authentication.controller';
 import { GoogleAuthenticationService } from './social/providers/google-authentication.service';
 @Module({
   providers: [
@@ -26,7 +26,7 @@ import { GoogleAuthenticationService } from './social/providers/google-authentic
     RefreshTokenProvider,
     GoogleAuthenticationService,
   ],
-  controllers: [AuthController, GoogleAuthentiocationController],
+  controllers: [AuthController, GoogleAuthenticationController],
   exports: [AuthService, HashingProvider],
   imports: [
     forwardRef(() => UsersModule),

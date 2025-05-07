@@ -42,7 +42,7 @@ export class CreateUserProvider {
 
     try {
       const hashedPassword = await this.hashingProvider.hashPassword(
-        createUserDto.password,
+        createUserDto.password || '',
       );
 
       const newUser = this.usersRepository.create({

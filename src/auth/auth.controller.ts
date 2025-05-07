@@ -16,6 +16,7 @@ import { SignInDto } from './dtos/signin';
 import { AuthType } from './enums/auth-type.enum';
 import { AuthService } from './providers/auth.service';
 import { RefreshTokenProvider } from './providers/refresh-token.provider';
+import { GoogleAuthenticationService } from './social/providers/google-authentication.service';
 
 @Controller('auth')
 @ApiTags('Authentication')
@@ -25,6 +26,7 @@ export class AuthController {
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
     private readonly refreshTokenProvider: RefreshTokenProvider,
+    private readonly googleAuthenticationService: GoogleAuthenticationService,
   ) {}
 
   @Post('login')
