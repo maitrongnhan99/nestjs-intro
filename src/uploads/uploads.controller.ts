@@ -11,8 +11,8 @@ import { UploadsService } from './providers/uploads.service';
 export class UploadsController {
   constructor(private readonly uploadsService: UploadsService) {}
 
-  @Post('file')
   @UseInterceptors(FileInterceptor('file'))
+  @Post('file')
   @ApiHeaders([
     {
       name: 'Authorization',
@@ -28,6 +28,7 @@ export class UploadsController {
     description: 'Upload a file to the server',
   })
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    return this.uploadsService.uploadFile(file);
+    console.log('@uploading', file);
+    return await this.uploadsService.uploadFile(file);
   }
 }

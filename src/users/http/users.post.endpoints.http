@@ -3,7 +3,7 @@ POST http://localhost:3000/users/create
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE5LCJlbWFpbCI6ImpvaG4uZGZzZGFmZGFzZm9lMjJAaGloaS5haSIsImlhdCI6MTc0NTUwNzAwMiwiZXhwIjoxNzQ1NTEwNjAyLCJhdWQiOiJsb2NhbGhvc3Q6MzAwMCIsImlzcyI6ImxvY2FsaG9zdDozMDAwIn0.vztUVzv0lTFSrHURu53I_N7zd1DYdrk-3TNwE3eEX1g
 {
-  "email": "m1a1itro1ngnh1an@h1ihi.ai",
+  "email": "maitrongnhan@gmail.com",
   "password": "12345678@Aafsda",
   "firstName": "John",
   "lastName": "Doe"
