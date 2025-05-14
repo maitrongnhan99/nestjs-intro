@@ -27,12 +27,10 @@ export class UploadsService {
       if (!supportFileTypes.includes(file.mimetype)) {
         throw new BadRequestException('Unsupported file type');
       }
-      console.log('@uploading', file);
       const name = await this.uploadToS3Provider.fileUpload(file);
-      console.log('@uploading', name);
       const uploadFile: UploadFile = {
         name,
-        path: `https://${this.configService.get('app.awsCloudFrontUrl') as string}/${name}`,
+        path: `https://${this.configService.get('app.awsCloudfrontUrl') as string}/${name}`,
         type: FileTypes.IMAGE,
         mime: file.mimetype,
         size: file.size,

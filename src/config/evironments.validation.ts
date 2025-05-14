@@ -26,4 +26,7 @@ export default Joi.object({
   AWS_CLOUDFRONT_URL: Joi.string().required(),
   AWS_PUBLIC_BUCKET_NAME: Joi.string().required(),
   AWS_REGION: Joi.string().required(),
+  MAIL_HOST: Joi.string().required(),
+  SMTP_USERNAME: Joi.string().required(),
+  SMTP_PASSWORD: Joi.string().required(),
 });

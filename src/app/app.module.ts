@@ -12,6 +12,7 @@ import appConfig from 'src/config/app.config';
 import databaseConfig from 'src/config/database.config';
 import environmentsValidation from 'src/config/evironments.validation';
 import jwtConfig from 'src/config/jwt.config';
+import { MailModule } from 'src/mail/mail.module';
 import { MetaOptionsModule } from 'src/meta-options/meta-options.module';
 import { PostsModule } from 'src/posts/posts.module';
 import { TagsModule } from 'src/tags/tags.module';
@@ -31,6 +32,7 @@ const ENV = process.env.NODE_ENV;
     TagsModule,
     UploadsModule,
     MetaOptionsModule,
+    MailModule,
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forRoot({
       isGlobal: true,

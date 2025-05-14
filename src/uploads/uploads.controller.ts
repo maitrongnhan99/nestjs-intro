@@ -7,6 +7,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiHeaders, ApiOperation } from '@nestjs/swagger';
 import { UploadsService } from './providers/uploads.service';
+
 @Controller('uploads')
 export class UploadsController {
   constructor(private readonly uploadsService: UploadsService) {}
@@ -28,7 +29,6 @@ export class UploadsController {
     description: 'Upload a file to the server',
   })
   async uploadFile(@UploadedFile() file: Express.Multer.File) {
-    console.log('@uploading', file);
     return await this.uploadsService.uploadFile(file);
   }
 }
